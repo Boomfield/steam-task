@@ -2,7 +2,7 @@
 <suite name="SteamTestSuite">
     <test name="SteamPurchaseAndDownloadTest">
         <classes>
-            <class name="tests.SteamPurchaseAndDownloadTest"/>
+            <class name="steam.tests.SteamPurchaseAndDownloadTest"/>
         </classes>
     </test>
 </suite>

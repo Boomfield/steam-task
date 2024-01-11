@@ -1,67 +1,56 @@
-package steam.pages.actionPage;
+package steam.pages;
 
-import framework.CommonFunction;
+import framework.CommonFunctions;
 import framework.elements.Button;
 import framework.elements.Label;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import steam.pages.BasePage;
 
-import java.util.List;
+import java.util.function.Predicate;
 
 public class ActionPage extends BasePage {
+    private static By lblMainTitle = By.xpath("//div[contains(@class,'ContentHubTitleCtn')]");
     private Button btnSaleCategory = new Button("//div[contains(@class,'saleitembrowser_FlavorLabel') and text()='%s']", "sale category");
     private Label lblDiscountInSaleList = new Label(By.xpath("//div[contains(@class,'StoreSaleWidgetContainer')]//div[contains(@class,'StoreSaleDiscountBox')]"), "discount");
     private Label lblGameDescriptionInMainBlock = new Label(By.xpath("//div[contains(@class,'animated_featured_capsule_AppRelevance')]"), "game description");
     private Button btnGameTitleInSaleList = new Button(By.xpath("//div[contains(@class,'alepreviewwidgets_Title')]//a[@href]"), "game title");
     private Button btnShowMore = new Button(By.xpath("//button[contains(@class,'ShowContentsButton')]"), "show more");
     private Button btnSaleGame = new Button(By.xpath("//div[contains(@class,'salepreviewwidgets_SaleItemBrowserRow')]"), "sale game");
-    private static By lblMainTitle = By.xpath("//div[contains(@class,'ContentHubTitleCtn')]");
 
     public ActionPage() {
-        super(lblMainTitle);
+        super(lblMainTitle, "Action page");
     }
 
-    public void clickSaleItem(String name) {
+    public void clickSaleCategory(String category) {
         lblGameDescriptionInMainBlock.isElementPresent();
         btnShowMore.scrollIntoView();
         btnSaleGame.isElementPresent();
-        btnSaleCategory.setLocatorByText(name);
-        btnSaleCategory.clickElement();
+        btnSaleCategory.getElementByText(category).clickElement();
     }
 
-    public List<String> getListOfDiscount() {
-        return lblDiscountInSaleList.getElementsTextList();
+    public int getIndexOfGameWithMaxDiscountInList() {
+        Predicate<WebElement> condition = x -> x.getText().contains(getMaxDiscount());
+        return lblDiscountInSaleList.getRandomElementIndexByCondition(condition);
     }
 
-    public int getGameListWithDiscount() {
-        List<WebElement> allGames = lblDiscountInSaleList.getElementsList();
-        List<WebElement> gamesWithSameDiscount = lblDiscountInSaleList.getElementsList()
-                .stream()
-                .filter(x->x.getText().contains(getMaxDiscount(getListOfDiscount())))
-                .toList();
-        WebElement randomGame = baseElement.getRandomElementInList(gamesWithSameDiscount);
-        return allGames.indexOf(randomGame);
-    }
-
-    public String clickElementWithMaxDiscount() {
-        int index = getGameListWithDiscount();
+    public String clickGameWithMaxDiscount() {
+        int index = getIndexOfGameWithMaxDiscountInList();
         String gameName = btnGameTitleInSaleList.getElementTextInListByIndex(index);
         btnGameTitleInSaleList.clickElementInListByIndex(index);
         return gameName;
     }
 
-    public String getGameWithMaxDiscountAndName(String name) {
-        clickSaleItem(name);
+    public String selectSaleCategoryAndClickRandomGameWithMaxDiscount(String category) {
+        clickSaleCategory(category);
         btnSaleGame.isElementPresent();
-        String gameName = clickElementWithMaxDiscount();
+        String gameName = clickGameWithMaxDiscount();
         baseElement.switchToLastWindow();
         return gameName;
     }
 
-    private String getMaxDiscount(List<String> discountList) {
-        int maxDiscount = discountList.stream()
-                .mapToInt(x -> CommonFunction.regexGetMatch(x, "[-%]"))
+    private String getMaxDiscount() {
+        int maxDiscount = lblDiscountInSaleList.getElementsTextList().stream()
+                .mapToInt(x -> Integer.parseInt(CommonFunctions.removeMatchingText(x, "[-%]")))
                 .max()
                 .orElse(0);
         return String.valueOf(maxDiscount);

@@ -8,13 +8,14 @@ import org.openqa.selenium.interactions.Actions;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class BaseElement {
     private Waiter waiter;
     private Actions actions;
-    private By locator;
-    private String xPath;
+    private By locatorType;
+    private String locatorValue;
     private String elementName;
 
     public BaseElement() {
@@ -22,24 +23,24 @@ public class BaseElement {
         this.actions = new Actions(Browser.getDriver());
     }
 
-    public BaseElement(By locator, String elementName) {
+    public BaseElement(By locatorType, String elementName) {
         this();
-        this.locator = locator;
+        this.locatorType = locatorType;
         this.elementName = elementName;
     }
 
-    public BaseElement(String xPath, String elementName) {
+    public BaseElement(String locatorValue, String elementName) {
         this();
-        this.xPath = xPath;
+        this.locatorValue = locatorValue;
         this.elementName = elementName;
     }
 
-    public void setLocatorByText(String text) {
-        this.locator = By.xpath(String.format(xPath, text));
+    public BaseElement getElementByText(String text) {
+        return new BaseElement(By.xpath(String.format(locatorValue, text)), elementName);
     }
 
     protected WebElement findElement(By locator) {
-        waiter.isElementPresent(locator);
+        waiter.waitForElementPresent(locator);
         return Browser.getDriver().findElement(locator);
     }
 
@@ -52,34 +53,38 @@ public class BaseElement {
     }
 
     public void clickElement() {
-        WebElement el = waiter.waitElementIsClickable(locator);
         Logger.logInfo("click by " + elementName);
+        WebElement el = waiter.waitElementIsClickable(locatorType);
         highlightElement(el);
         el.click();
     }
 
     public void clickElementWithAction() {
-        WebElement el = waiter.waitElementIsClickable(locator);
         Logger.logInfo("click by " + elementName);
+        WebElement el = waiter.waitElementIsClickable(locatorType);
         highlightElement(el);
         actions.click(el).perform();
     }
 
     public void clickElementInListByIndex(int index) {
-        List<WebElement> elements = findElements(locator);
-        WebElement element = elements.get(index);
         Logger.logInfo("click by " + elementName);
+        List<WebElement> elements = findElements(locatorType);
+        WebElement element = elements.get(index);
         getJavascriptExecutor().executeScript("arguments[0].click();", element);
     }
 
     public String getElementTextInListByIndex(int index) {
-        List<WebElement> elements = findElements(locator);
+        List<WebElement> elements = findElements(locatorType);
         WebElement element = elements.get(index);
-        return  element.getText();
+        return element.getText();
     }
 
     public String getText() {
-        return findElement(locator).getText();
+        return findElement(locatorType).getText();
+    }
+
+    public String getElementAttributeBy(String attributeName) {
+        return findElement(locatorType).getAttribute(attributeName);
     }
 
     protected List<WebElement> findElements(By locator) {
@@ -87,41 +92,48 @@ public class BaseElement {
     }
 
     public void moveMouseOnElement() {
-        WebElement el = findElement(locator);
-        highlightElement(el);
         Logger.logInfo("move mouse on " + elementName);
+        WebElement el = findElement(locatorType);
+        highlightElement(el);
         actions.moveToElement(el).perform();
     }
 
     public void sendKey(String text) {
-        WebElement el = findElement(locator);
-        highlightElement(el);
         Logger.logInfo("send key in " + elementName);
+        WebElement el = findElement(locatorType);
+        highlightElement(el);
         el.sendKeys(text);
     }
 
     public List<String> getElementsTextList() {
-        List<WebElement> elements = findElements(locator);
+        List<WebElement> elements = findElements(locatorType);
         return elements.stream()
                 .map(WebElement::getText)
                 .collect(Collectors.toList());
     }
 
     public List<WebElement> getElementsList() {
-        List<WebElement> elements = findElements(locator);
-        return elements;
+        return findElements(locatorType);
     }
 
     public WebElement getRandomElementInList(List<WebElement> elements) {
         return elements.get(new Random().nextInt(elements.size()));
     }
 
-    public void scrollIntoView() {
-        getJavascriptExecutor().executeScript("arguments[0].scrollIntoView({block: 'center'});", findElement(locator));
+    public int getRandomElementIndexByCondition(Predicate<WebElement> condition) {
+        List<WebElement> elements = getElementsList();
+        List<WebElement> filteredElements = elements.stream()
+                .filter(condition)
+                .toList();
+        return elements.indexOf(getRandomElementInList(filteredElements));
     }
 
-    public void isElementPresent() {
-        waiter.isElementPresent(locator);
+    public void scrollIntoView() {
+        getJavascriptExecutor().executeScript("arguments[0].scrollIntoView({block: 'center'});", findElement(locatorType));
+    }
+
+    public boolean isElementPresent() {
+        return waiter.waitForElementPresent(locatorType);
     }
 
     public void switchToLastWindow() {

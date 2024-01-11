@@ -1,26 +1,17 @@
 package framework.configuration;
 
-import framework.helpers.PropertyHelper;
 import org.openqa.selenium.WebDriver;
 
 public class Browser {
-
-    private static WebDriver driver;
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
-    public static final String PATH_DOWNLOAD_PACKAGE = PropertyHelper.getDownloadPath();
-    public static final int DEFAULT_PAGE_LOADED_TIMEOUT = PropertyHelper.getDefaultImplicitlyWait();
 
     public Browser(String browserType) {
-        driver = BrowserFactory.createBrowser(browserType);
-        setDriver();
-    }
-
-    public static void setDriver() {
+        WebDriver driver = BrowserFactory.createBrowser(browserType);
         driverThreadLocal.set(driver);
     }
 
     public void navigateToUrl(String url) {
-        driver.get(url);
+        getDriver().get(url);
     }
 
     public static WebDriver getDriver() {
@@ -28,8 +19,8 @@ public class Browser {
     }
 
     public void closeBrowser() {
-        if (driver != null) {
-            driver.quit();
+        if (getDriver() != null) {
+            getDriver().quit();
         }
     }
 }

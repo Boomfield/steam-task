@@ -1,19 +1,15 @@
-package framework.helpers;
+package steam.helpers;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import framework.helpers.PropertyLoader;
+
 import java.util.Properties;
 
-public class PropertyLocalizationHelper extends PropertyLoader{
+public class PropertyLocalization extends PropertyLoader {
     private static Properties properties;
 
     public static Properties loadProperties(String pathToPropertiesFile) {
         properties = PropertyLoader.initProperty(pathToPropertiesFile);
         return properties;
-    }
-
-    public static String getLanguage() {
-        return properties.getProperty("loc.language");
     }
 
     public static String getBtnCategories() {

@@ -4,19 +4,23 @@ import framework.elements.Waiter;
 import org.openqa.selenium.By;
 
 public abstract class BaseForm {
-
     private final By locator;
+    private final String currentPage;
     private final Waiter waiter;
 
-    protected BaseForm(By locator) {
+    protected BaseForm(By locator, String currentPage) {
         this.waiter = new Waiter();
         this.locator = locator;
+        this.currentPage = currentPage;
         assertIsOpen();
     }
 
     protected void assertIsOpen() {
-        if (!waiter.isElementPresent(locator)) {
-            throw new RuntimeException("Page is not open.");
+        try {
+            waiter.waitForElementPresent(locator);
+            Logger.logInfo(currentPage + " is open");
+        } catch (Exception e) {
+            Logger.logFatal(currentPage + "doesn't open");
         }
     }
 }

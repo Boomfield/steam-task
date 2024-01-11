@@ -2,19 +2,19 @@ package steam.pages;
 
 import framework.BaseForm;
 import framework.elements.BaseElement;
-import framework.elements.Waiter;
 import org.openqa.selenium.By;
 import org.testng.asserts.SoftAssert;
+import steam.pages.components.HeaderComponent;
 
 public class BasePage extends BaseForm {
     protected BaseElement baseElement;
     protected final SoftAssert softAssert;
-    protected Waiter waiter;
+    protected HeaderComponent headerComponent;
 
-    public BasePage( By locator) {
-        super(locator);
+    public BasePage(By locator, String currentPage) {
+        super(locator, currentPage);
+        this.headerComponent = new HeaderComponent();
         this.baseElement = new BaseElement();
-        this.waiter = new Waiter();
         this.softAssert = new SoftAssert();
     }
 }

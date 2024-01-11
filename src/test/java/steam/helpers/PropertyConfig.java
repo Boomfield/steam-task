@@ -1,10 +1,10 @@
-package framework.helpers;
+package steam.helpers;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import framework.helpers.PropertyLoader;
+
 import java.util.Properties;
 
-public class PropertyHelper extends PropertyLoader{
+public class PropertyConfig extends PropertyLoader {
     private static Properties properties;
 
     public static Properties loadProperties(String pathToPropertiesFile) {
@@ -27,6 +27,7 @@ public class PropertyHelper extends PropertyLoader{
     public static String getBrowser() {
         return properties.getProperty("browser");
     }
+
     public static String getDownloadPath() {
         return properties.getProperty("pathDownloadPackage");
     }
