@@ -1,6 +1,7 @@
 package steam.tests;
 
 import framework.configuration.Browser;
+import framework.configuration.BrowserFactory;
 import steam.helpers.PropertyConfig;
 import steam.helpers.PropertyLocalization;
 import org.testng.annotations.AfterMethod;
@@ -22,7 +23,7 @@ public class BaseTest {
 
     @BeforeMethod
     public void setUp() {
-        browser = new Browser(PropertyConfig.getBrowser());
+        browser = new Browser(BrowserFactory.BROWSER_TYPE);
         browser.navigateToUrl(PropertyConfig.getUrl());
     }
 

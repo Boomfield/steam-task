@@ -24,8 +24,8 @@ public class PropertyConfig extends PropertyLoader {
         return Integer.parseInt(properties.getProperty("defaultElementLoadTimeOut"));
     }
 
-    public static String getBrowser() {
-        return properties.getProperty("browser");
+    public static int getDefaultFileDownloadTimeOut() {
+        return Integer.parseInt(properties.getProperty("defaultFileDownloadTimeOut"));
     }
 
     public static String getDownloadPath() {

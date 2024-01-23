@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.function.Predicate;
 
-public class ActionPage extends BasePage {
+public class ActionPage extends BaseStreamPage {
     private static By lblMainTitle = By.xpath("//div[contains(@class,'ContentHubTitleCtn')]");
     private Button btnSaleCategory = new Button("//div[contains(@class,'saleitembrowser_FlavorLabel') and text()='%s']", "sale category");
     private Label lblDiscountInSaleList = new Label(By.xpath("//div[contains(@class,'StoreSaleWidgetContainer')]//div[contains(@class,'StoreSaleDiscountBox')]"), "discount");

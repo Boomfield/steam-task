@@ -3,12 +3,12 @@ package framework;
 import framework.elements.Waiter;
 import org.openqa.selenium.By;
 
-public abstract class BaseForm {
+public abstract class BasePage {
     private final By locator;
     private final String currentPage;
     private final Waiter waiter;
 
-    protected BaseForm(By locator, String currentPage) {
+    protected BasePage(By locator, String currentPage) {
         this.waiter = new Waiter();
         this.locator = locator;
         this.currentPage = currentPage;

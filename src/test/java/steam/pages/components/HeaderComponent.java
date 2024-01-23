@@ -13,7 +13,7 @@ public class HeaderComponent {
 
     public void clickLanguage(Language language) {
         if (!language.getLanguageCode().equals(getCurrentLanguage())) {
-            btnChooseLanguage.getElementByText(language.getDisplayName()).clickElement();
+            btnChooseLanguage.getElementByText(language.getDisplayName()).clickElementAndWait();
         }
     }
 
@@ -21,16 +21,12 @@ public class HeaderComponent {
         return lblHtml.getElementAttributeBy("lang");
     }
 
-    public void clickLanguageIcon() {
-        btnLanguage.clickElement();
-    }
-
     public void clickInstallSteam() {
-        btnInstallSteam.clickElement();
+        btnInstallSteam.clickElementAndWait();
     }
 
     public void selectLanguageInHeader(Language language) {
-        clickLanguageIcon();
+        btnLanguage.clickElement();
         clickLanguage(language);
     }
 }

@@ -3,7 +3,7 @@ package steam.pages;
 import framework.elements.Label;
 import org.openqa.selenium.By;
 
-public class GamePage extends BasePage {
+public class GamePage extends BaseStreamPage {
     private static By blkGameMediaBlock = By.className("game_background_glow");
     private Label lblGameName = new Label(By.id("appHubAppName"), "game name");
 

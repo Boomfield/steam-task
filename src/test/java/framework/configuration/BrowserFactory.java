@@ -1,5 +1,6 @@
 package framework.configuration;
 
+import framework.helpers.FileHelper;
 import steam.helpers.PropertyConfig;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,7 +12,8 @@ import java.time.Duration;
 import java.util.HashMap;
 
 public class BrowserFactory {
-    public static final String PATH_DOWNLOAD_PACKAGE = PropertyConfig.getDownloadPath();
+    public static final String CANONICAL_PATH_DOWNLOAD_PACKAGE = FileHelper.getCanonicalPath(PropertyConfig.getDownloadPath());
+    public static final String BROWSER_TYPE = System.getProperty("browser");
     private static final int DEFAULT_PAGE_LOADED_TIMEOUT = PropertyConfig.getDefaultImplicitlyWait();
 
     public static WebDriver createBrowser(String browserType) {
@@ -39,7 +41,7 @@ public class BrowserFactory {
         prefs.put("profile.default_content_settings.popups", 0);
         prefs.put("download.prompt_for_download", false);
         prefs.put("safebrowsing.enabled", true);
-        prefs.put("download.default_directory", PATH_DOWNLOAD_PACKAGE);
+        prefs.put("download.default_directory", CANONICAL_PATH_DOWNLOAD_PACKAGE);
         chromeOptions.setExperimentalOption("prefs", prefs);
         chromeOptions.addArguments("start-maximized");
         chromeOptions.addArguments("disable-blink-features=BlockCredentialedSubresources");
@@ -49,7 +51,7 @@ public class BrowserFactory {
     private static FirefoxOptions getFirefoxOptions() {
         FirefoxOptions options = new FirefoxOptions();
         options.addPreference("browser.download.folderList", 2);
-        options.addPreference("browser.download.dir", PATH_DOWNLOAD_PACKAGE);
+        options.addPreference("browser.download.dir", CANONICAL_PATH_DOWNLOAD_PACKAGE);
         options.addPreference("privacy.resistFingerprinting", true);
         return options;
     }

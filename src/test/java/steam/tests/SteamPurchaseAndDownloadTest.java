@@ -23,7 +23,7 @@ public class SteamPurchaseAndDownloadTest extends BaseTest {
 
     @BeforeMethod
     public void steamTestSetUp() {
-        File file = new File(BrowserFactory.PATH_DOWNLOAD_PACKAGE + AboutPage.STEAM_FILE_NAME);
+        File file = new File(BrowserFactory.CANONICAL_PATH_DOWNLOAD_PACKAGE + File.separator + AboutPage.STEAM_FILE_NAME);
         file.delete();
     }
 
@@ -32,17 +32,21 @@ public class SteamPurchaseAndDownloadTest extends BaseTest {
         Logger.logSteps(1, 4);
         mainPage = new MainPage();
         mainPage.selectLanguageAndElementInSubMenu(languageName, PropertyLocalization.getBtnCategories(), PropertyLocalization.getBtnAction());
+
         Logger.logSteps(5, 6);
         actionPage = new ActionPage();
         String name = actionPage.selectSaleCategoryAndClickRandomGameWithMaxDiscount(PropertyLocalization.getBtnDiscount());
+
         if (AgeCheckPage.isAgePagePresent()) {
             Logger.logSteps(7, 8);
             ageCheckPage = new AgeCheckPage();
             ageCheckPage.enterDateOfBirth(LocalDate.of(1995, 12, 12));
         }
+
         Logger.logStep(9);
         gamePage = new GamePage();
         gamePage.verifyCurrentPageAndClickInstall(name);
+
         Logger.logStep(10);
         aboutPage = new AboutPage();
         aboutPage.downloadSteam();

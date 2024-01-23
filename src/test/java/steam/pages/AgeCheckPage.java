@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 import java.time.LocalDate;
 
-public class AgeCheckPage extends BasePage {
+public class AgeCheckPage extends BaseStreamPage {
     private static By lblRootElement = By.className("age_gate");
     private DropDown ddbAgeDay = new DropDown(By.id("ageDay"), "age day");
     private DropDown ddbAgeMonth = new DropDown("//select[@name='ageMonth']//option[contains(@value,'')][%s]", "age month");
@@ -21,7 +21,7 @@ public class AgeCheckPage extends BasePage {
         ddbAgeDay.sendKey(String.valueOf(dateOfBirth.getDayOfMonth()));
         ddbAgeMonth.getElementByText(String.valueOf(dateOfBirth.getMonth().getValue())).clickElement();
         ddbAgeYear.sendKey(String.valueOf(dateOfBirth.getYear()));
-        btnViewProduct.clickElement();
+        btnViewProduct.clickElementAndWait();
     }
 
     public static boolean isAgePagePresent() {

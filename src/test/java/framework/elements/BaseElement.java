@@ -41,11 +41,11 @@ public class BaseElement {
 
     protected WebElement findElement(By locator) {
         waiter.waitForElementPresent(locator);
-        return Browser.getDriver().findElement(locator);
+        return getNativeDriver().findElement(locator);
     }
 
-    private JavascriptExecutor getJavascriptExecutor() {
-        return (JavascriptExecutor) Browser.getDriver();
+    public JavascriptExecutor getJavascriptExecutor() {
+        return (JavascriptExecutor) getNativeDriver();
     }
 
     private void highlightElement(WebElement element) {
@@ -57,6 +57,14 @@ public class BaseElement {
         WebElement el = waiter.waitElementIsClickable(locatorType);
         highlightElement(el);
         el.click();
+    }
+
+    public void clickElementAndWait() {
+        Logger.logInfo("click by " + elementName);
+        WebElement el = waiter.waitElementIsClickable(locatorType);
+        highlightElement(el);
+        el.click();
+        waiter.waitForPageToLoad(getJavascriptExecutor());
     }
 
     public void clickElementWithAction() {
@@ -88,7 +96,7 @@ public class BaseElement {
     }
 
     protected List<WebElement> findElements(By locator) {
-        return Browser.getDriver().findElements(locator);
+        return getNativeDriver().findElements(locator);
     }
 
     public void moveMouseOnElement() {
@@ -137,8 +145,12 @@ public class BaseElement {
     }
 
     public void switchToLastWindow() {
-        Set<String> windowHandles = Browser.getDriver().getWindowHandles();
+        Set<String> windowHandles = getNativeDriver().getWindowHandles();
         String newWindowHandle = windowHandles.stream().reduce((first, second) -> second).orElse(null);
-        Browser.getDriver().switchTo().window(newWindowHandle);
+        getNativeDriver().switchTo().window(newWindowHandle);
+    }
+
+    private WebDriver getNativeDriver() {
+        return Browser.getDriver();
     }
 }
