@@ -3,12 +3,13 @@ package steam.pages;
 import framework.CommonFunctions;
 import framework.elements.Button;
 import framework.elements.Label;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.function.Predicate;
 
-public class ActionPage extends BaseStreamPage {
+public class ActionPage extends BaseSteamPage {
     private static By lblMainTitle = By.xpath("//div[contains(@class,'ContentHubTitleCtn')]");
     private Button btnSaleCategory = new Button("//div[contains(@class,'saleitembrowser_FlavorLabel') and text()='%s']", "sale category");
     private Label lblDiscountInSaleList = new Label(By.xpath("//div[contains(@class,'StoreSaleWidgetContainer')]//div[contains(@class,'StoreSaleDiscountBox')]"), "discount");
@@ -40,6 +41,7 @@ public class ActionPage extends BaseStreamPage {
         return gameName;
     }
 
+    @Step("Select game with max discount in sale category")
     public String selectSaleCategoryAndClickRandomGameWithMaxDiscount(String category) {
         clickSaleCategory(category);
         btnSaleGame.isElementPresent();

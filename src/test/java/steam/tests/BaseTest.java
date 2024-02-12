@@ -18,6 +18,7 @@ public class BaseTest {
         PropertyConfig.loadProperties("src/test/resources/config.properties");
         String language = System.getProperty("language", "en");
         languageName = Language.getByCodeName(language);
+
         PropertyLocalization.loadProperties(String.format("src/test/resources/localization/loc-%s.properties", language));
     }
 

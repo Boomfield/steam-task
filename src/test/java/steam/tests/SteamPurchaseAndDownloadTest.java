@@ -2,6 +2,12 @@ package steam.tests;
 
 import framework.Logger;
 import framework.configuration.BrowserFactory;
+import io.qameta.allure.Description;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.Step;
+import io.qameta.allure.testng.AllureTestNg;
+import org.testng.annotations.Listeners;
 import steam.helpers.PropertyLocalization;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,6 +20,7 @@ import steam.pages.MainPage;
 import java.io.File;
 import java.time.LocalDate;
 
+@Listeners(AllureTestNg.class)
 public class SteamPurchaseAndDownloadTest extends BaseTest {
     private MainPage mainPage;
     private ActionPage actionPage;
@@ -28,6 +35,8 @@ public class SteamPurchaseAndDownloadTest extends BaseTest {
     }
 
     @Test
+    @Description("Check game with max discount and download steamSetup.exe")
+    @Severity(SeverityLevel.CRITICAL)
     public void steamPurchaseAndDownloadTest() {
         Logger.logSteps(1, 4);
         mainPage = new MainPage();

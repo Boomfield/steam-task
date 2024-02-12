@@ -2,11 +2,12 @@ package steam.pages;
 
 import framework.elements.Button;
 import framework.elements.DropDown;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 
 import java.time.LocalDate;
 
-public class AgeCheckPage extends BaseStreamPage {
+public class AgeCheckPage extends BaseSteamPage {
     private static By lblRootElement = By.className("age_gate");
     private DropDown ddbAgeDay = new DropDown(By.id("ageDay"), "age day");
     private DropDown ddbAgeMonth = new DropDown("//select[@name='ageMonth']//option[contains(@value,'')][%s]", "age month");
@@ -17,6 +18,7 @@ public class AgeCheckPage extends BaseStreamPage {
         super(lblRootElement, "Age check page");
     }
 
+    @Step("Enter date of birth")
     public void enterDateOfBirth(LocalDate dateOfBirth) {
         ddbAgeDay.sendKey(String.valueOf(dateOfBirth.getDayOfMonth()));
         ddbAgeMonth.getElementByText(String.valueOf(dateOfBirth.getMonth().getValue())).clickElement();
